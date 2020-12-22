@@ -11,7 +11,7 @@ pelo aplicativo, via requisição HTTP a uma API, que alimenta o aplicativo, com
 
 * **OK** : sem riscos na produção;
 * **WARNING** : superaquecimento dos maquinários: equipes internas da empresa em questão são acionadas via aplicativo para investigar o caso; 
-* **DANGER** : princípio de incêndio : população é notificada via aplicativo a sair de suas casas e buscar locais seguros corpo de bomebeiros é alertado sobre incêndio.
+* **DANGER** : princípio de incêndio : população é notificada via aplicativo a sair de suas casas e buscar locais seguros corpo de bombeiros é alertado sobre incêndio.
 
 Desenvolva uma API que forneça ao APP os reports de incidentes das empresas para os usuarios finais.
 
@@ -35,7 +35,7 @@ o usuário na API via HTTP POST.
       "cnpj" : "03373373371264",
       "fantasia" : "Nacional Gas",
       "contato" : "8532630001",
-      "nivelPerigo" : "OK",
+      "nivelPerigo" : "OK"
     },
     {
       "cnpj" : "00073372371264",
@@ -65,7 +65,7 @@ o usuário na API via HTTP POST.
     }
     ]
 
-*Empresa favorita:*
+*Consultar empresa favorita:*
 
     GET /empresas/03373373371264
     {
