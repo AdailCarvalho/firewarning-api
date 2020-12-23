@@ -23,7 +23,7 @@ public class UsuariosController {
   }
   
   @GetMapping()
-  public ResponseEntity<List<UsuarioDTO>> getMethodName() {
+  public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
     List<UsuarioDTO> usuarios = service.getUsuarios();
     return ResponseEntity.ok().body(usuarios);
   }
