@@ -22,6 +22,13 @@ public class UsuarioDTO implements Serializable {
     tipo = usuario.getPerfis();
   }
 
+  public UsuarioDTO(Long id, String nome, String email, Set<Tipo> tipo) {
+    this.id = id;
+    this.nome = nome;
+    this.email = email;
+    this.tipo = tipo;
+  }
+
   public Long getId() {
     return id;
   }
