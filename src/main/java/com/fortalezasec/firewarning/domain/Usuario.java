@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -11,6 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,11 +45,19 @@ public class Usuario implements Serializable {
   @CollectionTable(name = "PERFIS")
   private Set<Tipo> perfis = new HashSet<>();
 
-  public Usuario(Long id, String nome, String email, String senha, Set<Tipo> perfis) {
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinTable(name = "usuario_empresa_favorita", 
+    joinColumns = { @JoinColumn(name = "usuario_id", referencedColumnName = "id") },
+    inverseJoinColumns = { @JoinColumn(name = "empresa_favorita_id", referencedColumnName = "id") }
+  )
+  private EmpresaFavorita empresaFavorita;
+
+  public Usuario(Long id, String nome, String email, String senha, Set<Tipo> perfis, EmpresaFavorita empresaFavorita) {
     this.id = id;
     this.nome = nome;
     this.email = email;
     this.senha = senha;
+    this.empresaFavorita = empresaFavorita;
     setPerfis(perfis);
   }
 
@@ -89,6 +102,14 @@ public class Usuario implements Serializable {
 
   public void setPerfis(Set<Tipo> perfis) {
     this.perfis = perfis;
+  }
+
+  public EmpresaFavorita getEmpresaFavorita() {
+    return empresaFavorita;
+  }
+
+  public void setEmpresaFavorita(EmpresaFavorita empresaFavorita) {
+    this.empresaFavorita = empresaFavorita;
   }
 
   @Override
