@@ -25,7 +25,7 @@ public class UsuarioService {
     List<UsuarioDTO> usuariosDTO = new ArrayList<>();
     try {
       usuarios = repository.findAll();
-      usuariosDTO = toDTO(usuarios);
+      usuariosDTO = fromDTO(usuarios);
     } catch (Exception e) {
       System.out.println(e);
     }
@@ -33,7 +33,7 @@ public class UsuarioService {
     return usuariosDTO;
   }
 
-  private List<UsuarioDTO> toDTO(List<Usuario> usuarios) {
+  private List<UsuarioDTO> fromDTO(List<Usuario> usuarios) {
     List<UsuarioDTO> usuariosDTO = new ArrayList<>();
     usuarios.stream().forEach(u -> {
       usuariosDTO.add(new UsuarioDTO(u));
