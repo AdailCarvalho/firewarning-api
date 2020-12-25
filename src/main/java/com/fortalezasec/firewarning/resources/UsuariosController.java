@@ -3,8 +3,6 @@ package com.fortalezasec.firewarning.resources;
 import java.net.URI;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import com.fortalezasec.firewarning.Utils.FirewarningApplicationContext;
 import com.fortalezasec.firewarning.domain.EmpresaFavorita;
 import com.fortalezasec.firewarning.domain.Usuario;
@@ -48,7 +46,7 @@ public class UsuariosController {
   }
 
   @PostMapping
-  public ResponseEntity<UsuarioNewDTO> save(@Valid @RequestBody Usuario usuario) throws Exception {
+  public ResponseEntity<UsuarioNewDTO> save(@RequestBody Usuario usuario) throws Exception {
 
     Usuario entity = service.insert(usuario);
     UsuarioNewDTO dto = new UsuarioNewDTO(entity);
