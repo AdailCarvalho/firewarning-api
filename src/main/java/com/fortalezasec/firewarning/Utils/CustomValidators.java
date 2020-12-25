@@ -1,11 +1,13 @@
 package com.fortalezasec.firewarning.Utils;
 
+import com.fortalezasec.firewarning.services.Errors.CNPJInvalidoException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.caelum.stella.validation.CNPJValidator;
 
-@Component
+@Service
 public class CustomValidators {
 
   private CNPJValidator cnpjValidator;
@@ -14,14 +16,12 @@ public class CustomValidators {
   public CustomValidators(CNPJValidator cnpjValidator) {
     this.cnpjValidator = cnpjValidator;
   }
-  
-  public boolean validarCnpj(String cnpj) {
+
+  public void validarCnpj(String cnpj) {
     try {
       cnpjValidator.assertValid(cnpj);
-      return true;
     } catch (Exception e) {
-      e.printStackTrace();
-      return false;
+      throw new CNPJInvalidoException("CNPJ recebido é invalido");
     }
   };
 }
