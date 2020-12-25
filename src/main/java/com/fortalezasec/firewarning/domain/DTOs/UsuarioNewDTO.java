@@ -15,7 +15,7 @@ public class UsuarioNewDTO implements Serializable {
   private String email;
   private String senha;
   private Set<Tipo> tipo;
-  private EmpresaFavoritaNewDTO empresaFavoritaDTO;
+  private EmpresaFavoritaNewDTO empresaFavorita;
 
   public UsuarioNewDTO() {
   }
@@ -40,7 +40,7 @@ public class UsuarioNewDTO implements Serializable {
     this.email = email;
     this.senha = senha;
     this.tipo = tipo;
-    this.empresaFavoritaDTO = empresaFavorita;
+    this.empresaFavorita = empresaFavorita;
   }
 
   public Long getId() {
@@ -83,12 +83,12 @@ public class UsuarioNewDTO implements Serializable {
     this.senha = senha;
   }
 
-  public EmpresaFavoritaNewDTO getEmpresaFavoritaDTO() {
-    return empresaFavoritaDTO;
+  public EmpresaFavoritaNewDTO getEmpresaFavorita() {
+    return empresaFavorita;
   }
 
-  public void setEmpresaFavoritaDTO(EmpresaFavoritaNewDTO empresaFavorita) {
-    this.empresaFavoritaDTO = empresaFavorita;
+  public void setEmpresaFavorita(EmpresaFavoritaNewDTO empresaFavorita) {
+    this.empresaFavorita = empresaFavorita;
   }
 
 }
