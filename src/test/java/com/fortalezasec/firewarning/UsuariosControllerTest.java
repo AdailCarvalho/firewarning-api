@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fortalezasec.firewarning.domain.Tipo;
-import com.fortalezasec.firewarning.domain.UsuarioDTO;
+import com.fortalezasec.firewarning.domain.DTOs.UsuarioDTO;
 import com.fortalezasec.firewarning.resources.UsuariosController;
 import com.fortalezasec.firewarning.services.UsuarioService;
 
