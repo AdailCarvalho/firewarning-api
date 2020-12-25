@@ -25,13 +25,13 @@ public class DBService {
   private BCryptPasswordEncoder bcrypt;
 
   @Autowired
-  public DBService(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EmpresaService empresaService) {
+  public DBService(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository,
+      EmpresaService empresaService) {
     this.usuarioRepository = usuarioRepository;
     this.empresaRepository = empresaRepository;
   }
 
   public void instatiateTestDatabase() throws Exception {
-
     // Gerar Empresas
     Empresa empresa1 = new Empresa(null, "05.014.725/0001-52", "Shell", "contato@shell.com", "1111-2222",
         NivelPerigo.OK);
@@ -39,18 +39,20 @@ public class DBService {
         NivelPerigo.WARNING);
     Empresa empresa3 = new Empresa(null, "69.855.137/0001-24", "Petrobras", "contato@petrobras.com", "3333-4444",
         NivelPerigo.DANGER);
-
     empresaRepository.saveAll(Arrays.asList(empresa1, empresa2, empresa3));
 
     // Gerar Usuarios do Sistema
     Usuario usuario1 = new Usuario(null, "José Carlos", "josecarlos@etc.br", bcrypt.encode("senha"),
         new HashSet<Tipo>(Arrays.asList(Tipo.POPULACAO)), new EmpresaFavorita(null, empresa1.getCnpj(), "Tudo ok!"));
     Usuario usuario2 = new Usuario(null, "Patrícia Ramos", "pattyr@tal.br", bcrypt.encode("senha"),
-        new HashSet<Tipo>(Arrays.asList(Tipo.POPULACAO, Tipo.ADMIN)), new EmpresaFavorita(null, empresa2.getCnpj(), "Vazamento de óleo..."));
+        new HashSet<Tipo>(Arrays.asList(Tipo.POPULACAO, Tipo.ADMIN)),
+        new EmpresaFavorita(null, empresa2.getCnpj(), "Vazamento de óleo..."));
     Usuario usuario3 = new Usuario(null, "Zé Cantor", "zecantor@texaco.com", bcrypt.encode("senha"),
-        new HashSet<Tipo>(Arrays.asList(Tipo.ADMIN)), new EmpresaFavorita(null, empresa3.getCnpj(), "Foco de incendio!!!"));
+        new HashSet<Tipo>(Arrays.asList(Tipo.ADMIN)),
+        new EmpresaFavorita(null, empresa3.getCnpj(), "Foco de incendio!!!"));
     Usuario usuario4 = new Usuario(null, "SYS_SHELL", "sysshell@shell.com", bcrypt.encode("senha"),
-        new HashSet<Tipo>(Arrays.asList(Tipo.SISTEMA)), new EmpresaFavorita(null, empresa1.getCnpj(), "Foco de incendio na plataforma"));
+        new HashSet<Tipo>(Arrays.asList(Tipo.SISTEMA)),
+        new EmpresaFavorita(null, empresa1.getCnpj(), "Foco de incendio na plataforma"));
 
     usuarioRepository.saveAll(Arrays.asList(usuario1, usuario2, usuario3, usuario4));
   }
