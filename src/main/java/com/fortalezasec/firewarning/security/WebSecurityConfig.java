@@ -20,14 +20,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-    .antMatchers("/h2-console/**").permitAll()
+    // .antMatchers("/h2-console/**").permitAll()    
+    .antMatchers("/**").permitAll()    
     .anyRequest().authenticated()
     .and()
     .formLogin()
     .and()
     .httpBasic();
 
-    http.csrf().ignoringAntMatchers("/h2-console/**");
+    http.csrf().ignoringAntMatchers("/**");
     http.headers().frameOptions().sameOrigin();
   }
 
