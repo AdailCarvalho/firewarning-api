@@ -3,9 +3,8 @@ package com.fortalezasec.firewarning.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fortalezasec.firewarning.Utils.CustomValidators;
 import com.fortalezasec.firewarning.domain.Empresa;
-import com.fortalezasec.firewarning.domain.EmpresaDTO;
+import com.fortalezasec.firewarning.domain.DTOs.EmpresaDTO;
 import com.fortalezasec.firewarning.repository.EmpresaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,10 @@ import org.springframework.stereotype.Service;
 public class EmpresaService {
 
   private EmpresaRepository repository;
-  private CustomValidators validators;
 
   @Autowired
-  public EmpresaService(EmpresaRepository repository, CustomValidators validators) {
+  public EmpresaService(EmpresaRepository repository) {
     this.repository = repository;
-    this.validators = validators;
   }
 
   public List<EmpresaDTO> getAll() {
@@ -35,11 +32,7 @@ public class EmpresaService {
   }
 
   public Empresa getByCnpj(String cnpj) throws Exception {
-    if (validators.validarCnpj(cnpj)) {
-      return repository.findByCnpj(cnpj).get();
-    } else {
-      throw new Exception();
-    }
+    return repository.findByCnpj(cnpj).get();
   }
 
   private List<EmpresaDTO> fromDTO(List<Empresa> empresas) {
