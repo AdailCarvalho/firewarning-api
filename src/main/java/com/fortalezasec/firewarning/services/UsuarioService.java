@@ -60,7 +60,6 @@ public class UsuarioService {
       validators.validarCnpj(usuario.getEmpresaFavorita().getCnpj());
 
     // Ok, usuario não existe ainda
-
     if (getByEmail(usuario.getEmail()) == null) {
       Set<Tipo> perfis = new HashSet<>(Arrays.asList(Tipo.POPULACAO));
       usuario.setPerfis(perfis);
@@ -85,9 +84,4 @@ public class UsuarioService {
     return usuariosDTO;
   }
 
-  // public Usuario fromDTO(UsuarioNewDTO dto) {
-  // Usuario usuario = new Usuario(null, dto.getNome(), dto.getEmail(),
-  // dto.getSenha(), dto.getTipo(), dto.getEmpresaFavorita());
-  // return usuario;
-  // }
 }
