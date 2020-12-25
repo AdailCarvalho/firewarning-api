@@ -18,18 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class DBService {
 
+  @Autowired
   private UsuarioRepository usuarioRepository;
+
+  @Autowired
   private EmpresaRepository empresaRepository;
 
   @Autowired
   private BCryptPasswordEncoder bcrypt;
-
-  @Autowired
-  public DBService(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository,
-      EmpresaService empresaService) {
-    this.usuarioRepository = usuarioRepository;
-    this.empresaRepository = empresaRepository;
-  }
 
   public void instatiateTestDatabase() throws Exception {
     // Gerar Empresas

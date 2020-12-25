@@ -26,12 +26,8 @@ public class UsuarioService {
   @Autowired
   private CustomValidators validators;
 
-  private UsuarioRepository repository;
-
   @Autowired
-  public UsuarioService(UsuarioRepository repository) {
-    this.repository = repository;
-  }
+  private UsuarioRepository repository;
 
   public List<UsuarioDTO> getUsuarios() {
     List<Usuario> usuarios = new ArrayList<>();

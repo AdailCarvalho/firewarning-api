@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmpresaService {
 
-  private EmpresaRepository repository;
-
   @Autowired
-  public EmpresaService(EmpresaRepository repository) {
-    this.repository = repository;
-  }
+  private EmpresaRepository repository;
 
   public List<EmpresaDTO> getAll() {
     List<Empresa> empresas = repository.findAll();

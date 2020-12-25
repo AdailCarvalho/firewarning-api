@@ -25,12 +25,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/usuarios")
 public class UsuariosController {
 
-  private UsuarioService service;
-
   @Autowired
-  public UsuariosController(UsuarioService service) {
-    this.service = service;
-  }
+  private UsuarioService service;
 
   @GetMapping
   @PreAuthorize("hasAnyRole('ADMIN')")
