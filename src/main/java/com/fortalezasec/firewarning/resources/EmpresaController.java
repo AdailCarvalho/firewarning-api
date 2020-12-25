@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.fortalezasec.firewarning.Utils.FirewarningApplicatonContext;
+import com.fortalezasec.firewarning.Utils.FirewarningApplicationContext;
 import com.fortalezasec.firewarning.domain.Empresa;
 import com.fortalezasec.firewarning.domain.EmpresaFavorita;
 import com.fortalezasec.firewarning.domain.Usuario;
@@ -28,9 +28,9 @@ public class EmpresaController {
   private EmpresaService empresaService;
 
   @Autowired
-  private FirewarningApplicatonContext firewarningApplicatonContext;
+  private FirewarningApplicationContext firewarningApplicationContext;
 
-  @PreAuthorize("hasAnyRole('POPULACAO')")
+  @PreAuthorize("permitAll()")
   @GetMapping
   public ResponseEntity<List<EmpresaDTO>> getEmpresas() {
     List<EmpresaDTO> empresas = empresaService.getAll();
@@ -38,11 +38,11 @@ public class EmpresaController {
     return ResponseEntity.ok().body(empresas);
   }
 
-  @PreAuthorize("hasAnyRole('POPULACAO', 'ADMIN', 'SYSTEM')")
+  @PreAuthorize("permitAll()")
   @GetMapping("/favorita")
   public ResponseEntity<EmpresaFavoritaDTO> getEmpresaFavorita() {
     try {
-      Usuario usuarioLogado = firewarningApplicatonContext.getUsuarioLogado();
+      Usuario usuarioLogado = firewarningApplicationContext.getUsuarioLogado();
       Empresa empresa = empresaService.getByCnpj(usuarioLogado.getEmpresaFavorita().getCnpj());
       EmpresaFavorita empresaFavorita = usuarioLogado.getEmpresaFavorita();
       EmpresaFavoritaDTO dto = new EmpresaFavoritaDTO(empresaFavorita, empresa);
@@ -53,7 +53,7 @@ public class EmpresaController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('POPULACAO', 'ADMIN', 'SYSTEM')")
+  @PreAuthorize("permitAll()")
   @GetMapping("/{cnpj}")
   public ResponseEntity<EmpresaDTO> getEmpresa(@PathVariable String cnpj) {
     try {
