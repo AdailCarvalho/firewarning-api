@@ -1,11 +1,14 @@
 package com.fortalezasec.firewarning.services;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import com.fortalezasec.firewarning.domain.Empresa;
 import com.fortalezasec.firewarning.domain.EmpresaFavorita;
+import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.domain.NivelPerigo;
+import com.fortalezasec.firewarning.domain.Status;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.Usuario;
 import com.fortalezasec.firewarning.repository.EmpresaRepository;
@@ -23,6 +26,9 @@ public class DBService {
 
   @Autowired
   private EmpresaRepository empresaRepository;
+
+  @Autowired 
+  private IncidenteService incidenteService;
 
   @Autowired
   private BCryptPasswordEncoder bcrypt;
@@ -51,6 +57,18 @@ public class DBService {
         new EmpresaFavorita(null, empresa1.getCnpj(), "Foco de incendio na plataforma"));
 
     usuarioRepository.saveAll(Arrays.asList(usuario1, usuario2, usuario3, usuario4));
+
+    // Gerar Incidentes
+    LocalDateTime dataAb1 = LocalDateTime.of(2020, 12, 25, 19, 02, 37);
+    LocalDateTime dataAb2 = LocalDateTime.of(2020, 12, 24, 13, 04, 29);
+    LocalDateTime dataFe1 = LocalDateTime.of(2020, 12, 25, 14, 32, 58);
+    Incidente incidente1 = new Incidente(null, empresa1.getCnpj(), NivelPerigo.DANGER, "Vazamento de óleo no setor 3",
+        dataAb1, Status.ABERTO, null);
+    Incidente incidente2 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.WARNING, "Vazamento de combustível no setor 4",
+        dataAb2, Status.RESOLVIDO, dataFe1);
+
+    incidenteService.insert(incidente1);
+    incidenteService.insert(incidente2);
   }
 
 }
