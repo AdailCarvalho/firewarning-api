@@ -7,18 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fortalezasec.firewarning.Utils.CustomValidators;
+
+import br.com.caelum.stella.validation.CNPJValidator;
 
 @Entity
 public class Incidente implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @Transient
+  private CustomValidators validators = new CustomValidators(new CNPJValidator());
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @NotNull
+  private String cnpjEmpresa;
 
   @NotNull
   private NivelPerigo nivelPerigo;
@@ -27,7 +37,7 @@ public class Incidente implements Serializable {
   private String comentario;
 
   @NotNull
-  @DateTimeFormat
+  @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
   private LocalDateTime data;
 
   @NotNull
@@ -35,9 +45,10 @@ public class Incidente implements Serializable {
 
   private LocalDateTime dataResolucao;
 
-  public Incidente(Long id, NivelPerigo nivelPerigo, String comentario, LocalDateTime data, Status status,
-      LocalDateTime dataResolucao) {
+  public Incidente(Long id, String cnpjEmpresa, NivelPerigo nivelPerigo, String comentario, LocalDateTime data,
+      Status status, LocalDateTime dataResolucao) {
     this.id = id;
+    this.cnpjEmpresa = cnpjEmpresa;
     this.nivelPerigo = nivelPerigo;
     this.comentario = comentario;
     this.data = data;
@@ -55,6 +66,16 @@ public class Incidente implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getCnpjEmpresa() {
+    return cnpjEmpresa;
+  }
+
+  public void setCnpjEmpresa(String cnpjEmpresa) {
+    validators.validarCnpj(cnpjEmpresa);
+    cnpjEmpresa = cnpjEmpresa.replaceAll("[./-]", "");
+    this.cnpjEmpresa = cnpjEmpresa;
   }
 
   public NivelPerigo getNivelPerigo() {
