@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,6 +57,14 @@ public class Usuario implements Serializable {
     this.email = email;
     this.senha = senha;
     this.empresaFavorita = empresaFavorita;
+    setPerfis(perfis);
+  }
+
+  public Usuario(Long id, String nome, String email, String senha, Set<Tipo> perfis) {
+    this.id = id;
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
     setPerfis(perfis);
   }
 
