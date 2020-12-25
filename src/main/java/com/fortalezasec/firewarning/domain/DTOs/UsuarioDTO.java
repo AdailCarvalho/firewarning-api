@@ -1,7 +1,10 @@
-package com.fortalezasec.firewarning.domain;
+package com.fortalezasec.firewarning.domain.DTOs;
 
 import java.io.Serializable;
 import java.util.Set;
+
+import com.fortalezasec.firewarning.domain.Tipo;
+import com.fortalezasec.firewarning.domain.Usuario;
 
 public class UsuarioDTO implements Serializable {
 
@@ -11,7 +14,6 @@ public class UsuarioDTO implements Serializable {
   private String nome;
   private String email;
   private Set<Tipo> tipo;
-  private EmpresaFavorita empresaFavorita;
 
   public UsuarioDTO() {
   }
@@ -21,7 +23,6 @@ public class UsuarioDTO implements Serializable {
     nome = usuario.getNome();
     email = usuario.getEmail();
     tipo = usuario.getPerfis();
-    empresaFavorita = usuario.getEmpresaFavorita();
   }
 
   public UsuarioDTO(Long id, String nome, String email, Set<Tipo> tipo) {
@@ -61,14 +62,6 @@ public class UsuarioDTO implements Serializable {
 
   public void setTipo(Set<Tipo> tipo) {
     this.tipo = tipo;
-  }
-
-  public EmpresaFavorita getEmpresaFavorita() {
-    return empresaFavorita;
-  }
-
-  public void setEmpresaFavorita(EmpresaFavorita empresaFavorita) {
-    this.empresaFavorita = empresaFavorita;
   }
 
 }
