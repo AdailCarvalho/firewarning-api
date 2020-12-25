@@ -1,5 +1,7 @@
 package com.fortalezasec.firewarning.services;
 
+import javax.validation.ConstraintViolationException;
+
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.repository.IncidenteRepository;
 
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class IncidenteService {
-  
+
   @Autowired
   private IncidenteRepository repository;
 
@@ -22,16 +24,19 @@ public class IncidenteService {
     return entity;
   }
 
-  public Incidente update(Incidente incidente) {
-    Incidente entity = repository.findById(incidente.getId()).get();
+  public Incidente update(Long id, Incidente incidente) {
+    Incidente entity = repository.findById(id).get();
     entity = updateEntityWithIncident(entity, incidente);
-    return repository.save(entity);
+    try {
+      return repository.save(entity);
+    } catch (Exception e) {
+      throw new ConstraintViolationException(e.getMessage(), null);
+    }
   }
 
   private Incidente updateEntityWithIncident(Incidente entity, Incidente incidente) {
     entity.setComentario(incidente.getComentario());
     entity.setNivelPerigo(incidente.getNivelPerigo());
-    entity.setData(incidente.getData());
     entity.setStatus(incidente.getStatus());
     entity.setDataResolucao(incidente.getDataResolucao());
 
