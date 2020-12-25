@@ -2,12 +2,12 @@ package com.fortalezasec.firewarning.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -22,13 +22,14 @@ public class EmpresaFavorita implements Serializable {
   private String cnpj;
   private String comentario;
 
+  @ElementCollection(fetch = FetchType.LAZY)
   @OneToOne(mappedBy = "empresaFavorita")
   private Usuario usuario;
 
   public EmpresaFavorita(Long id, String cnpj, String comentario) {
     this.id = id;
     this.cnpj = cnpj;
-    this.comentario = comentario;    
+    this.comentario = comentario;
   }
 
   public EmpresaFavorita() {
@@ -42,20 +43,20 @@ public class EmpresaFavorita implements Serializable {
     this.id = id;
   }
 
-  public Usuario getUsuario() {
-    return usuario;
-  }
-
-  public void setUsuario(Usuario usuario) {
-    this.usuario = usuario;
-  }
-
   public String getCnpj() {
     return cnpj;
   }
 
   public void setCnpj(String cnpj) {
     this.cnpj = cnpj;
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
 
   public String getComentario() {
@@ -70,7 +71,7 @@ public class EmpresaFavorita implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((cnpj == null) ? 0 : cnpj.hashCode());
+    result = prime * result + ((comentario == null) ? 0 : comentario.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
@@ -84,10 +85,10 @@ public class EmpresaFavorita implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     EmpresaFavorita other = (EmpresaFavorita) obj;
-    if (cnpj == null) {
-      if (other.cnpj != null)
+    if (comentario == null) {
+      if (other.comentario != null)
         return false;
-    } else if (!cnpj.equals(other.cnpj))
+    } else if (!comentario.equals(other.comentario))
       return false;
     if (id == null) {
       if (other.id != null)
