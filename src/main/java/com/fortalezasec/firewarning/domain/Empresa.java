@@ -6,14 +6,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fortalezasec.firewarning.Utils.CustomValidators;
+
+import br.com.caelum.stella.validation.CNPJValidator;
 
 @Entity
 public class Empresa implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  @Transient
+  private CustomValidators validators = new CustomValidators(new CNPJValidator());
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +45,7 @@ public class Empresa implements Serializable {
 
   public Empresa(Long id, String cnpj, String fantasia, String email, String contato, NivelPerigo nivelPerigo) {
     this.id = id;
-    this.cnpj = cnpj;
+    setCnpj(cnpj);
     this.fantasia = fantasia;
     this.email = email;
     this.contato = contato;
@@ -60,6 +68,8 @@ public class Empresa implements Serializable {
   }
 
   public void setCnpj(String cnpj) {
+    validators.validarCnpj(cnpj);
+    cnpj = cnpj.replaceAll("[./-]", "");
     this.cnpj = cnpj;
   }
 
