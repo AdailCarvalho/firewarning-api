@@ -12,7 +12,6 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.DTOs.UsuarioDTO;
-import com.fortalezasec.firewarning.resources.UsuariosController;
 import com.fortalezasec.firewarning.services.UsuarioService;
 
 import org.junit.jupiter.api.Test;
@@ -37,10 +36,8 @@ public class UsuariosControllerTest {
   @Test
   void deveObterUmaListaDeUsuariosDTO() throws Exception {
 
-    UsuariosController usuariosController = new UsuariosController(service);
-
     mockMvc.perform(get("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json")
-        .content(objectMapper.writeValueAsString(usuariosController))).andExpect(status().isOk());
+        .content(objectMapper.writeValueAsString("usuariosController"))).andExpect(status().isOk());
 
     List<UsuarioDTO> resposta = service.getUsuarios();
 
