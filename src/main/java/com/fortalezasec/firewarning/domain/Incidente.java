@@ -27,22 +27,23 @@ public class Incidente implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
+  @NotNull(message = "Informe o CNPJ da empresa")
   private String cnpjEmpresa;
 
-  @NotNull
+  @NotNull(message = "Informe o nível de perigo")
   private NivelPerigo nivelPerigo;
 
-  @NotNull
+  @NotNull(message = "Descreva o incidente")
   private String comentario;
 
-  @NotNull
+  @NotNull(message = "Informe a data e o horário do incidente")
   @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
   private LocalDateTime data;
 
   @NotNull
   private Status status;
 
+  @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
   private LocalDateTime dataResolucao;
 
   public Incidente(Long id, String cnpjEmpresa, NivelPerigo nivelPerigo, String comentario, LocalDateTime data,
