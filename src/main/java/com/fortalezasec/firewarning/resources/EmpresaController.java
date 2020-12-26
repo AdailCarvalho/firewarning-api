@@ -14,6 +14,7 @@ import com.fortalezasec.firewarning.domain.DTOs.EmpresaDTO;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaFavoritaDTO;
 import com.fortalezasec.firewarning.services.EmpresaService;
 import com.fortalezasec.firewarning.services.IncidenteService;
+import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,12 +42,22 @@ public class EmpresaController {
   @Autowired
   private FirewarningApplicationContext firewarningApplicationContext;
 
-  @PreAuthorize("permitAll()")
   @GetMapping
+  @PreAuthorize("permitAll()")
   public ResponseEntity<List<EmpresaDTO>> getEmpresas() {
     List<EmpresaDTO> empresas = empresaService.getAll();
 
     return ResponseEntity.ok().body(empresas);
+  }
+
+  @GetMapping("/incidentes")
+  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
+  public ResponseEntity<List<Incidente>> getReportsBy(@RequestParam String tipo, @RequestParam String valor)
+      throws TypeDoNotExistsException {
+
+    List<Incidente> incidentesFiltrados = incidenteService.filterBy(tipo, valor);
+
+    return ResponseEntity.ok().body(incidentesFiltrados);
   }
 
   @PreAuthorize("permitAll()")
