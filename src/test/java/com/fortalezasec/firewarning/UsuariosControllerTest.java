@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fortalezasec.firewarning.domain.Usuario;
-import com.fortalezasec.firewarning.helpers.ConvertObjectsHelper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,7 @@ public class UsuariosControllerTest {
   void deveRetornarStatus201Created() throws Exception {
 
     Usuario usuario = new Usuario(null, "Fulano", "fulano@email.com", "senha", null);
-    String requestJson = ConvertObjectsHelper.mapObjectToJson(usuario);
-    mockMvc.perform(post("/usuarios").contentType("application/json").content(requestJson))
+    mockMvc.perform(post("/usuarios").contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated());
   }
 
