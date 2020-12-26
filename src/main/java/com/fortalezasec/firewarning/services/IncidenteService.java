@@ -2,8 +2,6 @@ package com.fortalezasec.firewarning.services;
 
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-
 import com.fortalezasec.firewarning.Utils.CustomValidators;
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.domain.NivelPerigo;
@@ -53,7 +51,7 @@ public class IncidenteService {
         Status status = Status.getStatusByDescricao(valor);
         return repository.findAllByStatus(status);
       default:
-        throw new EntityNotFoundException();
+        throw new TypeDoNotExistsException("O tipo especificado não era esperado");
     }
   }
 
