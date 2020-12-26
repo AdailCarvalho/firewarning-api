@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import com.fortalezasec.firewarning.services.Errors.CNPJInvalidoException;
+import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.services.Errors.UserAlreadyExistsException;
 
 import org.springframework.http.HttpStatus;
@@ -99,6 +100,14 @@ public class ResourceExceptionHandler {
 
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
 				"Erro de validação encontrado", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+
+	@ExceptionHandler(TypeDoNotExistsException.class)
+	public ResponseEntity<StandardError> typeDoNotExists(TypeDoNotExistsException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"O tipo solicitado não foi encontrado", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 
