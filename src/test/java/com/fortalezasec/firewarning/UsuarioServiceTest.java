@@ -37,8 +37,9 @@ public class UsuarioServiceTest {
     assertEquals(novoUsuario.getId(), 5L);
     assertEquals(novoUsuario.getNome(), "Fulano");
     assertEquals(novoUsuario.getEmail(), "fulano@email.com");
-    assertEquals(bcrypt.matches("senha", bcrypt.encode("senha")), true);
-    assertEquals(novoUsuario.getEmpresaFavorita(), null);
+    assertEquals(true, bcrypt.matches("senha", novoUsuario.getSenha()));
+    assertEquals(null, novoUsuario.getEmpresaFavorita());
+    assertEquals(true, novoUsuario.getPerfis().contains((Tipo.POPULACAO)));
   }
 
   @Test
