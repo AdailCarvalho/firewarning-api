@@ -50,6 +50,7 @@ public class UsuariosController {
 
     Usuario entity = service.insert(usuario);
     UsuarioNewDTO dto = new UsuarioNewDTO(entity);
+    dto.setSenha(null);
 
     if (entity.getEmpresaFavorita() != null) {
       EmpresaFavoritaNewDTO empresaDTO = new EmpresaFavoritaNewDTO(entity.getEmpresaFavorita());
