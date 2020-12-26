@@ -1,7 +1,5 @@
 package com.fortalezasec.firewarning.services;
 
-import javax.validation.ConstraintViolationException;
-
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.repository.IncidenteRepository;
 
@@ -27,11 +25,9 @@ public class IncidenteService {
   public Incidente update(Long id, Incidente incidente) {
     Incidente entity = repository.findById(id).get();
     entity = updateEntityWithIncident(entity, incidente);
-    try {
-      return repository.save(entity);
-    } catch (Exception e) {
-      throw new ConstraintViolationException(e.getMessage(), null);
-    }
+
+    return repository.save(entity);
+
   }
 
   private Incidente updateEntityWithIncident(Incidente entity, Incidente incidente) {
