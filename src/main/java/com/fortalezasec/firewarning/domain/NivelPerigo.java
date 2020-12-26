@@ -1,5 +1,7 @@
 package com.fortalezasec.firewarning.domain;
 
+import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
+
 public enum NivelPerigo {
   OK(1, "OK"), WARNING(2, "WARNING"), DANGER(3, "DANGER");
 
@@ -17,6 +19,19 @@ public enum NivelPerigo {
 
   public String getDescricao() {
     return descricao;
+  }
+
+  public static NivelPerigo getByDescricao(String nome) throws TypeDoNotExistsException {
+    switch (nome) {
+      case "OK":
+        return NivelPerigo.OK;
+      case "WARNING":
+        return NivelPerigo.WARNING;
+      case "DANGER":
+        return NivelPerigo.DANGER;
+      default:
+        throw new TypeDoNotExistsException("NivelPerigo não existe ou não informado");
+    }
   }
 
   public static Tipo toEnum(Integer cod) {
