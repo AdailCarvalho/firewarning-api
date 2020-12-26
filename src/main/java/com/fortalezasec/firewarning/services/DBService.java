@@ -27,7 +27,7 @@ public class DBService {
   @Autowired
   private EmpresaRepository empresaRepository;
 
-  @Autowired 
+  @Autowired
   private IncidenteService incidenteService;
 
   @Autowired
@@ -58,17 +58,37 @@ public class DBService {
 
     usuarioRepository.saveAll(Arrays.asList(usuario1, usuario2, usuario3, usuario4));
 
-    // Gerar Incidentes
-    LocalDateTime dataAb1 = LocalDateTime.of(2020, 12, 25, 19, 02, 37);
-    LocalDateTime dataAb2 = LocalDateTime.of(2020, 12, 24, 13, 04, 29);
-    LocalDateTime dataFe1 = LocalDateTime.of(2020, 12, 25, 14, 32, 58);
+    // Gerar Incidentes abertos
     Incidente incidente1 = new Incidente(null, empresa1.getCnpj(), NivelPerigo.DANGER, "Vazamento de óleo no setor 3",
-        dataAb1, Status.ABERTO, null);
-    Incidente incidente2 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.WARNING, "Vazamento de combustível no setor 4",
-        dataAb2, Status.RESOLVIDO, dataFe1);
+        LocalDateTime.of(2020, 12, 25, 19, 02, 37), Status.ABERTO, null);
+    Incidente incidente2 = new Incidente(null, empresa1.getCnpj(), NivelPerigo.DANGER,
+        "Reservatório de gás apresenta micro rachaduras", LocalDateTime.of(2020, 12, 22, 19, 02, 37), Status.ABERTO,
+        null);
+    Incidente incidente3 = new Incidente(null, empresa1.getCnpj(), NivelPerigo.WARNING,
+        "Fumaça detectada em um container", LocalDateTime.of(2020, 12, 26, 19, 02, 37), Status.ABERTO, null);
+    Incidente incidente4 = new Incidente(null, empresa1.getCnpj(), NivelPerigo.WARNING,
+        "Faíscas detectadas em um fio de transmissão", LocalDateTime.of(2020, 11, 23, 19, 02, 37), Status.ABERTO, null);
+
+    // Gerar Incidentes resolvidos
+    Incidente incidente5 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.DANGER, "Vazamento de óleo no setor 4",
+        LocalDateTime.of(2020, 12, 24, 13, 04, 29), Status.RESOLVIDO, LocalDateTime.of(2020, 12, 25, 14, 32, 58));
+    Incidente incidente6 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.DANGER, "Container rachado no pier 76",
+        LocalDateTime.of(2020, 12, 24, 13, 04, 29), Status.RESOLVIDO, LocalDateTime.of(2020, 12, 26, 14, 32, 58));
+    Incidente incidente7 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.WARNING,
+        "Operários sem máscara no setor 3", LocalDateTime.of(2020, 12, 24, 13, 04, 29), Status.RESOLVIDO,
+        LocalDateTime.of(2020, 12, 25, 14, 32, 58));
+    Incidente incidente8 = new Incidente(null, empresa2.getCnpj(), NivelPerigo.WARNING,
+        "Borrachas ressecadas na porta da camara de refinamento", LocalDateTime.of(2020, 12, 24, 13, 04, 29),
+        Status.RESOLVIDO, LocalDateTime.of(2020, 12, 25, 14, 32, 58));
 
     incidenteService.insert(incidente1);
     incidenteService.insert(incidente2);
+    incidenteService.insert(incidente3);
+    incidenteService.insert(incidente4);
+    incidenteService.insert(incidente5);
+    incidenteService.insert(incidente6);
+    incidenteService.insert(incidente7);
+    incidenteService.insert(incidente8);
   }
 
 }
