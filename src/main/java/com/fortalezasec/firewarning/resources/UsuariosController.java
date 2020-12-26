@@ -46,6 +46,7 @@ public class UsuariosController {
   }
 
   @PostMapping
+  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
   public ResponseEntity<UsuarioNewDTO> save(@RequestBody Usuario usuario) throws Exception {
 
     Usuario entity = service.insert(usuario);
@@ -68,9 +69,10 @@ public class UsuariosController {
       Usuario usuario = fireWarnAppContext.getUsuarioLogado();
       EmpresaFavorita empresaFavorita = new EmpresaFavorita(null, cnpj, comentario);
       usuario.setEmpresaFavorita(empresaFavorita);
-
+      
       usuario = repository.save(usuario);
       UsuarioNewDTO dto = new UsuarioNewDTO(usuario);
+      dto.setSenha(null);
       EmpresaFavoritaNewDTO empDto = new EmpresaFavoritaNewDTO(usuario.getEmpresaFavorita());
       dto.setEmpresaFavorita(empDto);
       return ResponseEntity.ok().body(dto);

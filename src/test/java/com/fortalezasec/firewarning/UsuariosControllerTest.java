@@ -39,7 +39,7 @@ public class UsuariosControllerTest {
   void shouldCreateUsuarioSimplesReturnStatus201CreatedAndUsuarioDTO() throws Exception {
     Usuario usuario = new Usuario(null, "Fulano", "fulano@email.com", "senha", null);
     MvcResult result = mockMvc
-        .perform(post("/usuarios").contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
+        .perform(post("/usuarios").with(httpBasic("pattyr@tal.br", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
     String usuarioJsonResponse = result.getResponse().getContentAsString();
 
@@ -57,7 +57,7 @@ public class UsuariosControllerTest {
     usuario.setEmpresaFavorita(new EmpresaFavorita(null, "05014725000152", "Vazamento de oleo..."));
 
     MvcResult result = mockMvc
-        .perform(post("/usuarios").contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
+        .perform(post("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
 
     String usuarioJsonResponse = result.getResponse().getContentAsString();

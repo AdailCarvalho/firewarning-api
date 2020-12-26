@@ -88,7 +88,7 @@ public class EmpresaController {
     }
   }
 
-  @PreAuthorize("permitAll()")
+  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
   @PostMapping("/{cnpj}")
   public ResponseEntity<Incidente> incidenteRegister(@PathVariable String cnpj, @RequestBody Incidente incidente) {
 
@@ -110,7 +110,7 @@ public class EmpresaController {
 
   }
 
-  @PreAuthorize("permitAll()")
+  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
   @PutMapping("/{id}")
   public ResponseEntity<Incidente> update(@PathVariable Long id, @RequestBody Incidente incidente) {
     Incidente entity = incidenteService.update(id, incidente);
