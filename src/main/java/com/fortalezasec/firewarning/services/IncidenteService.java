@@ -1,13 +1,24 @@
 package com.fortalezasec.firewarning.services;
 
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
+import com.fortalezasec.firewarning.Utils.CustomValidators;
 import com.fortalezasec.firewarning.domain.Incidente;
+import com.fortalezasec.firewarning.domain.NivelPerigo;
+import com.fortalezasec.firewarning.domain.Status;
 import com.fortalezasec.firewarning.repository.IncidenteRepository;
+import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IncidenteService {
+
+  @Autowired
+  CustomValidators validators;
 
   @Autowired
   private IncidenteRepository repository;
@@ -28,6 +39,22 @@ public class IncidenteService {
 
     return repository.save(entity);
 
+  }
+
+  public List<Incidente> filterBy(String tipo, String valor) throws TypeDoNotExistsException {
+    switch (tipo) {
+      case "cnpj":
+        validators.validarCnpj(valor);
+        return repository.findAllByCnpjEmpresa(valor);
+      case "nivelPerigo":
+        NivelPerigo nivelPerigo = NivelPerigo.getByDescricao(valor);
+        return repository.findAllByNivelPerigo(nivelPerigo);
+      case "status":
+        Status status = Status.getStatusByDescricao(valor);
+        return repository.findAllByStatus(status);
+      default:
+        throw new EntityNotFoundException();
+    }
   }
 
   private Incidente updateEntityWithIncident(Incidente entity, Incidente incidente) {
