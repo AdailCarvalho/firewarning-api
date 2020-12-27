@@ -11,6 +11,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fortalezasec.firewarning.Utils.CustomValidators;
 
 import br.com.caelum.stella.validation.CNPJValidator;
@@ -44,6 +46,7 @@ public class Incidente implements Serializable {
   private Status status;
 
   @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+  @JsonInclude(Include.NON_EMPTY)
   private LocalDateTime dataResolucao;
 
   public Incidente(Long id, String cnpjEmpresa, NivelPerigo nivelPerigo, String comentario, LocalDateTime data,
