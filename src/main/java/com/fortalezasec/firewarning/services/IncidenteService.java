@@ -25,6 +25,10 @@ public class IncidenteService {
     return repository.findById(id).get();
   }
 
+  public List<Incidente> getAll() {
+    return repository.findAll();
+  }
+
   public Incidente insert(Incidente incidente) {
     Incidente entity = repository.save(incidente);
 
