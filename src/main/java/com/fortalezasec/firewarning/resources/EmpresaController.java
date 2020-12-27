@@ -107,12 +107,11 @@ public class EmpresaController {
 
       Incidente entity = incidenteService.insert(incidente);
 
-      URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{cnpj}").buildAndExpand(entity.getCnpjEmpresa())
+      URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand()
           .toUri();
 
       return ResponseEntity.created(uri).body(entity);
     } catch (Exception e) {
-
       throw new EntityNotFoundException("Empresa não encontrada com este CNPJ");
     }
 
