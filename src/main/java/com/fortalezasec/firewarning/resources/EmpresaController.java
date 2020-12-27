@@ -1,6 +1,7 @@
 package com.fortalezasec.firewarning.resources;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -52,10 +53,17 @@ public class EmpresaController {
 
   @GetMapping("/incidentes")
   @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
-  public ResponseEntity<List<Incidente>> getReportsBy(@RequestParam String tipo, @RequestParam String valor)
-      throws TypeDoNotExistsException {
+  public ResponseEntity<List<Incidente>> getReportsBy(@RequestParam(required = false) String tipo,
+      @RequestParam(required = false) String valor) throws TypeDoNotExistsException {
 
-    List<Incidente> incidentesFiltrados = incidenteService.filterBy(tipo, valor);
+    List<Incidente> incidentesFiltrados = new ArrayList<>();
+
+    if (tipo == null && valor == null) {
+      incidentesFiltrados = incidenteService.getAll();
+      return ResponseEntity.ok().body(incidentesFiltrados);
+    }
+    
+    incidentesFiltrados = incidenteService.filterBy(tipo, valor);
 
     return ResponseEntity.ok().body(incidentesFiltrados);
   }
