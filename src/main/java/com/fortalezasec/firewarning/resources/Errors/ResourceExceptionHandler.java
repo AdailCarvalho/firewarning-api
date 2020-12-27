@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import com.fortalezasec.firewarning.services.Errors.CNPJInvalidoException;
-import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
-import com.fortalezasec.firewarning.services.Errors.UserAlreadyExistsException;
+import com.fortalezasec.firewarning.CustomExceptions.CNPJInvalidoException;
+import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
+import com.fortalezasec.firewarning.CustomExceptions.UriMalFormadaException;
+import com.fortalezasec.firewarning.CustomExceptions.UserAlreadyExistsException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,4 +112,12 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 
+	@ExceptionHandler(UriMalFormadaException.class)
+	public ResponseEntity<StandardError> typeDoNotExists(UriMalFormadaException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"UriMalFormadaException", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
 }
