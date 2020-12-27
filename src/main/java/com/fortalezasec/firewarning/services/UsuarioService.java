@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fortalezasec.firewarning.CustomExceptions.UserAlreadyExistsException;
 import com.fortalezasec.firewarning.Utils.CustomValidators;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.Usuario;
 import com.fortalezasec.firewarning.domain.DTOs.UsuarioDTO;
 import com.fortalezasec.firewarning.repository.UsuarioRepository;
-import com.fortalezasec.firewarning.services.Errors.UserAlreadyExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

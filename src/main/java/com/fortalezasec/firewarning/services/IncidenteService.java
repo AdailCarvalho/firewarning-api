@@ -2,12 +2,12 @@ package com.fortalezasec.firewarning.services;
 
 import java.util.List;
 
+import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.Utils.CustomValidators;
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.domain.NivelPerigo;
 import com.fortalezasec.firewarning.domain.Status;
 import com.fortalezasec.firewarning.repository.IncidenteRepository;
-import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

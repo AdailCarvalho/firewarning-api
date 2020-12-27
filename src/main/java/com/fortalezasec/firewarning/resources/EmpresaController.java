@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.Utils.FirewarningApplicationContext;
 import com.fortalezasec.firewarning.domain.Empresa;
 import com.fortalezasec.firewarning.domain.EmpresaFavorita;
@@ -15,7 +16,6 @@ import com.fortalezasec.firewarning.domain.DTOs.EmpresaDTO;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaFavoritaDTO;
 import com.fortalezasec.firewarning.services.EmpresaService;
 import com.fortalezasec.firewarning.services.IncidenteService;
-import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

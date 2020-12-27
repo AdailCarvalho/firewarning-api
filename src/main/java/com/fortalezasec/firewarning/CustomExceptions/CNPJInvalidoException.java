@@ -1,4 +1,4 @@
-package com.fortalezasec.firewarning.services.Errors;
+package com.fortalezasec.firewarning.CustomExceptions;
 
 public class CNPJInvalidoException extends RuntimeException {
 

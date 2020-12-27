@@ -1,6 +1,6 @@
 package com.fortalezasec.firewarning.domain;
 
-import com.fortalezasec.firewarning.services.Errors.TypeDoNotExistsException;
+import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
 
 public enum NivelPerigo {
   OK(1, "OK"), WARNING(2, "WARNING"), DANGER(3, "DANGER");
