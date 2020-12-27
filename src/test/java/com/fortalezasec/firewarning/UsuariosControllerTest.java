@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -41,7 +42,7 @@ public class UsuariosControllerTest {
     MvcResult result = mockMvc
         .perform(post("/usuarios").with(httpBasic("pattyr@tal.br", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
-    String usuarioJsonResponse = result.getResponse().getContentAsString();
+    String usuarioJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
     Usuario usuarioConverted = objectMapper.readValue(usuarioJsonResponse, Usuario.class);
     assertEquals(5L, usuarioConverted.getId());
@@ -60,7 +61,7 @@ public class UsuariosControllerTest {
         .perform(post("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
 
-    String usuarioJsonResponse = result.getResponse().getContentAsString();
+    String usuarioJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
     Usuario usuarioConverted = objectMapper.readValue(usuarioJsonResponse, Usuario.class);
     assertEquals(5L, usuarioConverted.getId());
@@ -76,7 +77,7 @@ public class UsuariosControllerTest {
         .perform(get("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json"))
         .andExpect(status().isOk()).andReturn();
 
-    String usuariosJsonResponse = result.getResponse().getContentAsString();
+    String usuariosJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
     UsuarioNewDTO[] usuariosConverted = objectMapper.readValue(usuariosJsonResponse, UsuarioNewDTO[].class);
 
