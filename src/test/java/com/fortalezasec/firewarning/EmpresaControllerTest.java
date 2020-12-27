@@ -2,14 +2,16 @@ package com.fortalezasec.firewarning;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.domain.NivelPerigo;
+import com.fortalezasec.firewarning.domain.Status;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaDTO;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaFavoritaDTO;
 
@@ -53,7 +55,8 @@ public class EmpresaControllerTest {
   @Test
   void shouldListAllIncidentesAndReturnStatus200Ok() throws Exception {
     MvcResult result = mockMvc
-        .perform(get("/empresas/incidentes").with(httpBasic("sysshell@shell.com", "senha")).contentType("application/json"))
+        .perform(
+            get("/empresas/incidentes").with(httpBasic("sysshell@shell.com", "senha")).contentType("application/json"))
         .andExpect(status().isOk()).andReturn();
 
     String empresasJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -68,7 +71,8 @@ public class EmpresaControllerTest {
   @Test
   void shouldListIncidentesFilterByCNPJAndReturnStatus200Ok() throws Exception {
     MvcResult result = mockMvc
-        .perform(get("/empresas/incidentes?tipo=cnpj&valor=03021302000134").with(httpBasic("sysshell@shell.com", "senha")).contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/empresas/incidentes?tipo=cnpj&valor=03021302000134")
+            .with(httpBasic("sysshell@shell.com", "senha")).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()).andReturn();
 
     String empresasJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -84,13 +88,14 @@ public class EmpresaControllerTest {
 
   @Test
   void shouldReturnEmpresaFavoritaAndReturnStatus200Ok() throws Exception {
-    MvcResult result = mockMvc
-        .perform(get("/empresas/favorita").with(httpBasic("josecarlos@etc.br", "senha")).contentType(MediaType.APPLICATION_JSON))
+    MvcResult result = mockMvc.perform(
+        get("/empresas/favorita").with(httpBasic("josecarlos@etc.br", "senha")).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()).andReturn();
 
     String empresaFavoritaJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-    EmpresaFavoritaDTO empresaFavoritaConverted = objectMapper.readValue(empresaFavoritaJsonResponse, EmpresaFavoritaDTO.class);
+    EmpresaFavoritaDTO empresaFavoritaConverted = objectMapper.readValue(empresaFavoritaJsonResponse,
+        EmpresaFavoritaDTO.class);
 
     assertEquals("05014725000152", empresaFavoritaConverted.getCnpj());
     assertEquals("Shell", empresaFavoritaConverted.getFantasia());
@@ -98,5 +103,44 @@ public class EmpresaControllerTest {
     assertEquals("Tudo ok!", empresaFavoritaConverted.getComentario());
 
   }
-  
+
+  @Test
+  void ShouldRegisterAnIncicentAndReturnStatus201Created() throws Exception {
+
+    String incidenteJson = "{\"nivelPerigo\":\"DANGER\",\"comentario\":\"Explosão de tubulação no setor 5\",\"data\":\"2020/12/26 19:02:37\",\"status\":\"ABERTO\"}";
+
+    MvcResult result = mockMvc.perform(post("/empresas/05014725000152").with(httpBasic("zecantor@texaco.com", "senha"))
+        .contentType("application/json").content(incidenteJson)).andExpect(status().isCreated()).andReturn();
+
+    String incidenteJsonResult = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+    Incidente incidenteRegistrado = objectMapper.readValue(incidenteJsonResult, Incidente.class);
+
+    assertEquals(9L, incidenteRegistrado.getId());
+    assertEquals("05014725000152", incidenteRegistrado.getCnpjEmpresa());
+    assertEquals(NivelPerigo.DANGER, incidenteRegistrado.getNivelPerigo());
+    assertEquals("Explosão de tubulação no setor 5", incidenteRegistrado.getComentario());
+    assertEquals(LocalDateTime.of(2020, 12, 26, 19, 2, 37), incidenteRegistrado.getData());
+    assertEquals(Status.ABERTO, incidenteRegistrado.getStatus());
+  }
+
+  @Test
+  void ShouldUpdateAnIncicentAndReturnStatus200Ok() throws Exception {
+
+    String incidenteJson = "{\"nivelPerigo\":\"DANGER\",\"comentario\":\"Explosão de tubulação no setor 5\",\"status\":\"RESOLVIDO\",\"dataResolucao\":\"2020/12/27 20:02:37\"}";
+
+    MvcResult result = mockMvc.perform(put("/empresas/1").with(httpBasic("zecantor@texaco.com", "senha"))
+        .contentType("application/json").content(incidenteJson)).andExpect(status().isOk()).andReturn();
+
+    String incidenteJsonResult = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+    Incidente incidenteRegistrado = objectMapper.readValue(incidenteJsonResult, Incidente.class);
+
+    assertEquals(1L, incidenteRegistrado.getId());
+    assertEquals("05014725000152", incidenteRegistrado.getCnpjEmpresa());
+    assertEquals(NivelPerigo.DANGER, incidenteRegistrado.getNivelPerigo());
+    assertEquals("Explosão de tubulação no setor 5", incidenteRegistrado.getComentario());
+    assertEquals(LocalDateTime.of(2020, 12, 27, 20, 2, 37), incidenteRegistrado.getDataResolucao());
+    assertEquals(Status.RESOLVIDO, incidenteRegistrado.getStatus());
+  }
 }
