@@ -7,11 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import com.fortalezasec.firewarning.CustomExceptions.CNPJInvalidoException;
-import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
-import com.fortalezasec.firewarning.CustomExceptions.UriMalFormadaException;
-import com.fortalezasec.firewarning.CustomExceptions.UserAlreadyExistsException;
+import com.fortalezasec.firewarning.customexceptions.CNPJInvalidoException;
+import com.fortalezasec.firewarning.customexceptions.TypeDoNotExistsException;
+import com.fortalezasec.firewarning.customexceptions.UriMalFormadaException;
+import com.fortalezasec.firewarning.customexceptions.UserAlreadyExistsException;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -117,6 +118,14 @@ public class ResourceExceptionHandler {
 
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
 				"UriMalFormadaException", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	public ResponseEntity<StandardError> typeDoNotExists(EmptyResultDataAccessException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Não existe um objeto com o ID informado", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 	
