@@ -52,7 +52,7 @@ public class EmpresaController {
   }
 
   @GetMapping("/incidentes")
-  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'SISTEMA')")
   public ResponseEntity<List<Incidente>> getReportsBy(@RequestParam(required = false) String tipo,
       @RequestParam(required = false) String valor) throws TypeDoNotExistsException {
 
@@ -96,7 +96,7 @@ public class EmpresaController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'SISTEMA')")
   @PostMapping("/{cnpj}")
   public ResponseEntity<Incidente> incidenteRegister(@PathVariable String cnpj, @RequestBody Incidente incidente) {
 
@@ -117,7 +117,7 @@ public class EmpresaController {
 
   }
 
-  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'SISTEMA')")
   @PutMapping("/{id}")
   public ResponseEntity<Incidente> update(@PathVariable Long id, @RequestBody Incidente incidente) {
     Incidente entity = incidenteService.update(id, incidente);

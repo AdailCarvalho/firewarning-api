@@ -39,14 +39,14 @@ public class UsuariosController {
   private FirewarningApplicationContext fireWarnAppContext;
 
   @GetMapping
-  @PreAuthorize("hasAnyRole('ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
     List<UsuarioDTO> usuarios = service.getUsuarios();
     return ResponseEntity.ok().body(usuarios);
   }
 
   @PostMapping
-  @PreAuthorize("hasAnyRole('ADMIN', 'SISTEMA')")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'SISTEMA')")
   public ResponseEntity<UsuarioNewDTO> save(@RequestBody Usuario usuario) throws Exception {
 
     Usuario entity = service.insert(usuario);

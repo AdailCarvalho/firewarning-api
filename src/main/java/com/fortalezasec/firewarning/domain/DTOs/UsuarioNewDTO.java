@@ -3,6 +3,7 @@ package com.fortalezasec.firewarning.domain.DTOs;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.Usuario;
 
@@ -13,6 +14,8 @@ public class UsuarioNewDTO implements Serializable {
   private Long id;
   private String nome;
   private String email;
+
+  @JsonIgnore
   private String senha;
   private Set<Tipo> tipo;
   private EmpresaFavoritaNewDTO empresaFavorita;

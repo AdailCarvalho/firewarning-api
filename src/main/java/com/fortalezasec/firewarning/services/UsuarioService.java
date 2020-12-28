@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.fortalezasec.firewarning.CustomExceptions.UserAlreadyExistsException;
@@ -50,9 +51,12 @@ public class UsuarioService {
   }
 
   public Usuario getByEmail(String email) {
-    Usuario usuario = repository.findByEmail(email);
-
-    return usuario;
+    Optional<Usuario> usuario = repository.findByEmail(email);
+    if (usuario.isPresent()) {
+      return usuario.get();
+    } else {
+      return null;
+    }
   }
 
   public Usuario insert(Usuario usuario) throws Exception {
