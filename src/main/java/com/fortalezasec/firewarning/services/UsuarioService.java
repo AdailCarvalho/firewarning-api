@@ -88,4 +88,8 @@ public class UsuarioService {
     return usuariosDTO;
   }
 
+  public void delete(Long id) {
+    repository.deleteById(id);
+  }
+
 }
