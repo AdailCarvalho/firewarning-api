@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.Utils.FirewarningApplicationContext;
+import com.fortalezasec.firewarning.customexceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.domain.Empresa;
 import com.fortalezasec.firewarning.domain.EmpresaFavorita;
 import com.fortalezasec.firewarning.domain.Incidente;
@@ -132,6 +132,14 @@ public class EmpresaController {
     empresaService.delete(id);
 
     return ResponseEntity.ok().body("Empresa excluída com sucesso");
+  }
+
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'SISTEMA')")
+  @DeleteMapping("/incidentes/{id}")
+  public ResponseEntity<String> deleteIncidente(@PathVariable Long id) {
+    incidenteService.delete(id);
+
+    return ResponseEntity.ok().body("Incidente excluído com sucesso");
   }
 
 }

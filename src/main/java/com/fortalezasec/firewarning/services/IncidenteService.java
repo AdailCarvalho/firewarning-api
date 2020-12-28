@@ -2,8 +2,8 @@ package com.fortalezasec.firewarning.services;
 
 import java.util.List;
 
-import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.Utils.CustomValidators;
+import com.fortalezasec.firewarning.customexceptions.TypeDoNotExistsException;
 import com.fortalezasec.firewarning.domain.Incidente;
 import com.fortalezasec.firewarning.domain.NivelPerigo;
 import com.fortalezasec.firewarning.domain.Status;
@@ -57,6 +57,10 @@ public class IncidenteService {
       default:
         throw new TypeDoNotExistsException("O tipo especificado não era esperado");
     }
+  }
+
+  public void delete(Long id) {
+    repository.deleteById(id);
   }
 
   private Incidente updateEntityWithIncident(Incidente entity, Incidente incidente) {
