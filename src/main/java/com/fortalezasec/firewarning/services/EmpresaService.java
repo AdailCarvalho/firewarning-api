@@ -38,4 +38,9 @@ public class EmpresaService {
     });
     return empresasDTO;
   }
+
+  public void delete(Long id) {
+    repository.deleteById(id);
+  }
+
 }
