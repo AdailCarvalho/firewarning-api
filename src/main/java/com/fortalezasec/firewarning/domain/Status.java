@@ -1,6 +1,6 @@
 package com.fortalezasec.firewarning.domain;
 
-import com.fortalezasec.firewarning.CustomExceptions.TypeDoNotExistsException;
+import com.fortalezasec.firewarning.customexceptions.TypeDoNotExistsException;
 
 public enum Status {
   ABERTO(1, "ABERTO"), RESOLVIDO(2, "RESOLVIDO");

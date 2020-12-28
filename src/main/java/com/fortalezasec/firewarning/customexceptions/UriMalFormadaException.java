@@ -1,4 +1,4 @@
-package com.fortalezasec.firewarning.CustomExceptions;
+package com.fortalezasec.firewarning.customexceptions;
 
 public class UriMalFormadaException extends RuntimeException {
 

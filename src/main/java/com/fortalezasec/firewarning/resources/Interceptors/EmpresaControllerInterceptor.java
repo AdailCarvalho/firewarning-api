@@ -3,7 +3,7 @@ package com.fortalezasec.firewarning.resources.Interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fortalezasec.firewarning.CustomExceptions.UriMalFormadaException;
+import com.fortalezasec.firewarning.customexceptions.UriMalFormadaException;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.fortalezasec.firewarning.CustomExceptions.UserAlreadyExistsException;
 import com.fortalezasec.firewarning.Utils.CustomValidators;
+import com.fortalezasec.firewarning.customexceptions.UserAlreadyExistsException;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.Usuario;
 import com.fortalezasec.firewarning.domain.DTOs.UsuarioDTO;

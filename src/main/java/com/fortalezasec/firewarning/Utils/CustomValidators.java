@@ -1,6 +1,6 @@
 package com.fortalezasec.firewarning.Utils;
 
-import com.fortalezasec.firewarning.CustomExceptions.CNPJInvalidoException;
+import com.fortalezasec.firewarning.customexceptions.CNPJInvalidoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
