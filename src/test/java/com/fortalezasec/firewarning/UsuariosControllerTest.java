@@ -1,7 +1,6 @@
 package com.fortalezasec.firewarning;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,11 +14,16 @@ import com.fortalezasec.firewarning.domain.EmpresaFavorita;
 import com.fortalezasec.firewarning.domain.Tipo;
 import com.fortalezasec.firewarning.domain.Usuario;
 import com.fortalezasec.firewarning.domain.DTOs.UsuarioNewDTO;
+import com.fortalezasec.firewarning.security.jwt.JwtUtils;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,11 +40,25 @@ public class UsuariosControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  @Autowired
+  AuthenticationManager authenticationManager;
+
+  @Autowired
+  private JwtUtils jwtUtils;
+
+  String autheticate(String username, String password) {
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    String token = jwtUtils.generateJwtToken(authentication);
+    return "Bearer " + token;
+  };
+
   @Test
   void shouldCreateUsuarioSimplesReturnStatus201CreatedAndUsuarioDTO() throws Exception {
+    String token = autheticate("pattyr@tal.br", "senha");
     Usuario usuario = new Usuario(null, "Fulano", "fulano@email.com", "senha", null);
-    MvcResult result = mockMvc
-        .perform(post("/usuarios").with(httpBasic("pattyr@tal.br", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
+    MvcResult result = mockMvc.perform(post("/usuarios").header(HttpHeaders.AUTHORIZATION, token)
+        .contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
     String usuarioJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
@@ -53,12 +71,13 @@ public class UsuariosControllerTest {
 
   @Test
   void shouldCreateUsuarioCompletoReturnStatus201CreatedAndUsuarioDTO() throws Exception {
+    String token = autheticate("pattyr@tal.br", "senha");
     Usuario usuario = new Usuario(null, "fulano", "fulano@email.com", "senha",
         new HashSet<Tipo>(Arrays.asList(Tipo.POPULACAO)));
     usuario.setEmpresaFavorita(new EmpresaFavorita(null, "05014725000152", "Vazamento de oleo..."));
 
-    MvcResult result = mockMvc
-        .perform(post("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
+    MvcResult result = mockMvc.perform(post("/usuarios").header(HttpHeaders.AUTHORIZATION, token)
+        .contentType("application/json").content(objectMapper.writeValueAsString(usuario)))
         .andExpect(status().isCreated()).andReturn();
 
     String usuarioJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -73,8 +92,9 @@ public class UsuariosControllerTest {
 
   @Test
   void shouldReturnAListOfUsuariosAndStatus200Ok() throws Exception {
+    String token = autheticate("pattyr@tal.br", "senha");
     MvcResult result = mockMvc
-        .perform(get("/usuarios").with(httpBasic("zecantor@texaco.com", "senha")).contentType("application/json"))
+        .perform(get("/usuarios").header(HttpHeaders.AUTHORIZATION, token).contentType("application/json"))
         .andExpect(status().isOk()).andReturn();
 
     String usuariosJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);

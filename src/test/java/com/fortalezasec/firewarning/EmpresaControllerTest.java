@@ -1,8 +1,9 @@
 package com.fortalezasec.firewarning;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
@@ -14,12 +15,16 @@ import com.fortalezasec.firewarning.domain.NivelPerigo;
 import com.fortalezasec.firewarning.domain.Status;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaDTO;
 import com.fortalezasec.firewarning.domain.DTOs.EmpresaFavoritaDTO;
+import com.fortalezasec.firewarning.security.jwt.JwtUtils;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,10 +41,23 @@ public class EmpresaControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  @Autowired
+  AuthenticationManager authenticationManager;
+
+  @Autowired
+  private JwtUtils jwtUtils;
+
+  String autheticate(String username, String password) {
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    String token = jwtUtils.generateJwtToken(authentication);
+    return "Bearer " + token;
+  };
+
   @Test
   void shouldListAllEmpresasAndReturnStatus200Ok() throws Exception {
-    MvcResult result = mockMvc
-        .perform(get("/empresas").with(httpBasic("josecarlos@etc.br", "senha")).contentType("application/json"))
+    String token = autheticate("zecantor@texaco.com", "senha");
+    MvcResult result = mockMvc.perform(get("/empresas").header(HttpHeaders.AUTHORIZATION, token))
         .andExpect(status().isOk()).andReturn();
 
     String empresasJsonResponse = result.getResponse().getContentAsString();
@@ -54,9 +72,8 @@ public class EmpresaControllerTest {
 
   @Test
   void shouldListAllIncidentesAndReturnStatus200Ok() throws Exception {
-    MvcResult result = mockMvc
-        .perform(
-            get("/empresas/incidentes").with(httpBasic("sysshell@shell.com", "senha")).contentType("application/json"))
+    String token = autheticate("zecantor@texaco.com", "senha");
+    MvcResult result = mockMvc.perform(get("/empresas/incidentes").header(HttpHeaders.AUTHORIZATION, token))
         .andExpect(status().isOk()).andReturn();
 
     String empresasJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -70,9 +87,9 @@ public class EmpresaControllerTest {
 
   @Test
   void shouldListIncidentesFilterByCNPJAndReturnStatus200Ok() throws Exception {
+    String token = autheticate("zecantor@texaco.com", "senha");
     MvcResult result = mockMvc
-        .perform(get("/empresas/incidentes?tipo=cnpj&valor=03021302000134")
-            .with(httpBasic("sysshell@shell.com", "senha")).contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/empresas/incidentes?tipo=cnpj&valor=03021302000134").header(HttpHeaders.AUTHORIZATION, token))
         .andExpect(status().isOk()).andReturn();
 
     String empresasJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -88,8 +105,8 @@ public class EmpresaControllerTest {
 
   @Test
   void shouldReturnEmpresaFavoritaAndReturnStatus200Ok() throws Exception {
-    MvcResult result = mockMvc.perform(
-        get("/empresas/favorita").with(httpBasic("josecarlos@etc.br", "senha")).contentType(MediaType.APPLICATION_JSON))
+    String token = autheticate("zecantor@texaco.com", "senha");
+    MvcResult result = mockMvc.perform(get("/empresas/favorita").header(HttpHeaders.AUTHORIZATION, token))
         .andExpect(status().isOk()).andReturn();
 
     String empresaFavoritaJsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -97,19 +114,19 @@ public class EmpresaControllerTest {
     EmpresaFavoritaDTO empresaFavoritaConverted = objectMapper.readValue(empresaFavoritaJsonResponse,
         EmpresaFavoritaDTO.class);
 
-    assertEquals("05014725000152", empresaFavoritaConverted.getCnpj());
-    assertEquals("Shell", empresaFavoritaConverted.getFantasia());
-    assertEquals(NivelPerigo.OK, empresaFavoritaConverted.getNivelPerigo());
-    assertEquals("Tudo ok!", empresaFavoritaConverted.getComentario());
+    assertEquals("69855137000124", empresaFavoritaConverted.getCnpj());
+    assertEquals("Petrobras", empresaFavoritaConverted.getFantasia());
+    assertEquals(NivelPerigo.DANGER, empresaFavoritaConverted.getNivelPerigo());
+    assertEquals("Foco de incendio!!!", empresaFavoritaConverted.getComentario());
 
   }
 
   @Test
   void ShouldRegisterAnIncicentAndReturnStatus201Created() throws Exception {
-
+    String token = autheticate("pattyr@tal.br", "senha");
     String incidenteJson = "{\"nivelPerigo\":\"DANGER\",\"comentario\":\"Explosão de tubulação no setor 5\",\"data\":\"2020/12/26 19:02:37\",\"status\":\"ABERTO\"}";
 
-    MvcResult result = mockMvc.perform(post("/empresas/05014725000152").with(httpBasic("zecantor@texaco.com", "senha"))
+    MvcResult result = mockMvc.perform(post("/empresas/05014725000152").header(HttpHeaders.AUTHORIZATION, token)
         .contentType("application/json").content(incidenteJson)).andExpect(status().isCreated()).andReturn();
 
     String incidenteJsonResult = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
@@ -126,10 +143,10 @@ public class EmpresaControllerTest {
 
   @Test
   void ShouldUpdateAnIncicentAndReturnStatus200Ok() throws Exception {
-
+    String token = autheticate("pattyr@tal.br", "senha");
     String incidenteJson = "{\"nivelPerigo\":\"DANGER\",\"comentario\":\"Explosão de tubulação no setor 5\",\"status\":\"RESOLVIDO\",\"dataResolucao\":\"2020/12/27 20:02:37\"}";
 
-    MvcResult result = mockMvc.perform(put("/empresas/1").with(httpBasic("zecantor@texaco.com", "senha"))
+    MvcResult result = mockMvc.perform(put("/empresas/1").header(HttpHeaders.AUTHORIZATION, token)
         .contentType("application/json").content(incidenteJson)).andExpect(status().isOk()).andReturn();
 
     String incidenteJsonResult = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
